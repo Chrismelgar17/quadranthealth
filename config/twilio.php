@@ -1,7 +1,7 @@
 <?php
 return [
-    'sid' => env('TWILIO_SID'),
+    'account_sid' => env('TWILIO_SID'),
     'auth_token' => env('TWILIO_AUTH_TOKEN'),
-    'from_number' => env('TWILIO_FROM_NUMBER'),
-    'twiml_app_sid' => env('TWILIO_TWIML_APP_SID'),
+    'twilio_number' => env('TWILIO_NUMBER'),
+    'medical_practice_number' => env('MEDICAL_PRACTICE_NUMBER'),
 ];
