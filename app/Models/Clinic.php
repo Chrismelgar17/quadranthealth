@@ -21,11 +21,6 @@ class Clinic extends Model
         'first_message',
     ];
 
-    // Create a new clinic record
-    public static function createClinic($data)
-    {
-        return self::create($data);
-    }
 
     // Read a clinic record by ID
     public static function getClinicById($id)
@@ -33,16 +28,14 @@ class Clinic extends Model
         return self::find($id);
     }
 
-    // Update a clinic record by ID
-    public static function updateClinic($id, $data)
-    {
-        $clinic = self::find($id);
-        if ($clinic) {
-            $clinic->update($data);
-            return $clinic;
-        }
-        return null;
-    }
+     // Upsert a clinic record
+     public static function upsertClinic($data)
+     {
+         return self::upsert(
+             ['id' => $data['id']], // Assuming 'id' is the unique identifier
+             $data
+         );
+     }
 
     // Delete a clinic record by ID
     public static function deleteClinic($id)
