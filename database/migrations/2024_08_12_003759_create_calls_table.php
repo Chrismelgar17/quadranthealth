@@ -9,13 +9,14 @@ class CreateCallsTable extends Migration
     public function up()
     {
         Schema::create('calls', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->unique();
             $table->string('call_sid')->unique();
             $table->string('patient_phone');
             $table->string('request_type');
             $table->text('transcript')->nullable();
             $table->text('summary')->nullable();
             $table->timestamps();
+            $table->primary('id');
         });
     }
 

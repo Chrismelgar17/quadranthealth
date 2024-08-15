@@ -18,9 +18,14 @@ class VapiService
     public function initiateCall($phoneNumber)
     {
 
-        $clinic_name = "Dr. Smith's Clinic";
-        $clinic_address = "123 Main St, Toronto";
+        $clinic_name = "Saint Peter Clinic";
+        $clinic_address = "123 Main Street, Toronto";
         $clinic_hours = "Monday to Friday, 9:00 AM to 5:00 PM";
+        $aditional_clinic_goals = "See for available appointments.
+        - Provide information about the clinic's services (e.g., general check-ups, vaccinations, etc.).
+        - Provide information about the clinic's location and hours of operation.
+        - Provide information about the clinic's COVID-19 safety measures.
+        - Provide information about the clinic's payment options.";
 
         $content = "You are a voice assistant for $clinic_name, a medical office located at $clinic_address.
          The hours are $clinic_hours. 
@@ -39,6 +44,8 @@ class VapiService
         - Request the name of the medication they need refilled.
         - Ask if there have been any changes in their health or other medications since their last visit.
         - Inform them that their request will be reviewed by Dr. Smith and they will be contacted if there are any issues.
+
+        $aditional_clinic_goals
 
         3. Other Topics:
         - For any other topics or requests, inform the caller that the practice will be notified and follow up shortly.
@@ -69,7 +76,7 @@ class VapiService
                             ],
                         ],
                     ],
-                    'firstMessage' => "Hello, this is Ava. How may I assist you today? You can make an appointment booking, medication refills or other. Please let me know.",
+                    'firstMessage' => "Hello, this is Gabriela. How may I assist you today? You can make an appointment booking, a medication refill or another. Please let me know.",
                     'endCallMessage' => 'Thanks for your time. Goodbye!',
                 ],
                 'customer' => [
@@ -78,7 +85,7 @@ class VapiService
         ]);
 
         if ($response->successful()) {
-            return $response->json()['callId'];
+            return $response->json()['id'];
         }
 
         throw new \Exception('Failed to initiate Vapi AI call: ' . $response->body());
