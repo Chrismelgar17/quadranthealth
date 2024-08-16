@@ -47,30 +47,32 @@ class TwilioWebhookController extends Controller
         // Get the vapi_call_id from the Calls model based on the CallSid
         $vapiCallId = Calls::where('call_sid', $callSid)->value('vapi_call_id');
 
+        // Delay execution for 60 seconds
+        sleep(120);
 
+        // Continue with the rest of the code
         $response = $this->vapiService->getCallStatus($vapiCallId);
 
-Log::info('CallSid: ' . $response);
+        //parse response to string
+        $response = json_encode($response);
 
-        // if ($response) {
-           
+        $file=fopen("response.txt","w");
+        fwrite($file,$response);
 
-        //     if (isset($response['transcript']) && isset($response['summary'])) {
-        //         $transcript = $response['transcript'];
-        //         $summary = $response['summary'];
+       $callData = json_decode($response, true);
 
-        //         Calls::upsert([
-        //             'transcript' => $transcript,
-        //             'summary' => $summary
-        //         ], ['call_sid'], ['transcript', 'summary']);
-        //     }
-        // }
+        $transcript = $callData['transcript'];
+        $summary = $callData['summary'];
 
-        // // Log the values of the variables
-        // Log::info('CallSid: ' . $callSid);
-        // Log::info('vapi_call_id: ' . $vapiCallId);
-        // Log::info('transcript: ' . $transcript);
-        // Log::info('summary: ' . $summary);
+
+        // Update the Calls model with the extracted transcript and other relevant information
+        Calls::upsert([
+            'call_sid' => $callSid,
+            'vapi_call_id' => $vapiCallId,
+            'transcript' => $transcript,
+            'summary' => $summary,
+        ], ['call_sid'], ['transcript', 'summary']);
+
         // Return a 200 OK response to Twilio
         return response('Webhook received', 200);
     }
