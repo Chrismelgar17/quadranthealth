@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Services\VapiService;
 use Illuminate\Http\Request;
 use Twilio\TwiML\VoiceResponse;
+use Illuminate\Support\Facades\Log;
+use App\Models\Calls;
 
 class CallController extends Controller
 {
@@ -18,9 +20,17 @@ class CallController extends Controller
     public function handleIncomingCall(Request $request)
     {
         
+        Log::info('Incoming call: ' , $request->all());
+
         
         // try {
-            $this->vapiService->initiateCall(config('twilio.medical_practice_number'));
+            $vapiCallId = $this->vapiService->initiateCall(config('twilio.medical_practice_number'));
+            Calls::upsert([
+                'call_sid' => $request->input('CallSid'),
+                'vapi_call_id' => $vapiCallId,
+            ], ['call_sid'], ['vapi_call_id']);
+
+
             // $response = new VoiceResponse();
             // $response->say('Please hold while we connect you to our assistant.');
             // $response->redirect(route('call.vapi-status-callback', ['vapiCallId' => $vapiCallId]));

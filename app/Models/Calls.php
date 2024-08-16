@@ -13,8 +13,8 @@ class Calls extends Model
     protected $table = 'calls';
 
     protected $fillable = [
-        'id',
         'call_sid',
+        'vapi_call_id',
         'patient_phone',
         'request_type',
         'transcript',

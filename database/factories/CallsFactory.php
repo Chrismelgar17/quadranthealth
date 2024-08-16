@@ -18,8 +18,8 @@ class CallsFactory extends Factory
     public function definition()
     {
         return [
-            'id' => Str::uuid()->toString(), // Generate a unique string for the 'id' field
             'call_sid' => Str::uuid()->toString(), // Generate a unique string for the 'call_sid' field
+            'vapi_call_id' => Str::uuid()->toString(), // Generate a unique string for the 'vapi_call_id' field
             'request_type' => $this->faker->word,
             'transcript' => $this->faker->sentence,
             'summary' => $this->faker->paragraph,

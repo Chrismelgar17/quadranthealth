@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class VapiService
 {
@@ -98,7 +99,7 @@ class VapiService
         ])->get($this->apiUrl . '/call/' . $callId);
 
         if ($response->successful()) {
-            return $response->json()['status'];
+            return $response->json();
         }
 
         throw new \Exception('Failed to get Vapi AI call status: ' . $response->body());

@@ -13,11 +13,11 @@ class CreateCallsTable extends Migration
     public function up()
     {
         Schema::create('calls', function (Blueprint $table) {
-            $table->uuid('id')->primary(); // Use UUID for the 'id' field
-            $table->uuid('call_sid'); // Use UUID for the 'call_sid' field
-            $table->string('request_type');
-            $table->text('transcript');
-            $table->text('summary');
+            $table->uuid('call_sid')->primary(); // Use UUID for the 'call_sid' 
+            $table->uuid('vapi_call_id'); // Use UUID for the 'vapi_call_id'
+            $table->string('request_type')->nullable();
+            $table->text('transcript')->nullable();
+            $table->text('summary')->nullable();
             $table->timestamps();
         });
     }
