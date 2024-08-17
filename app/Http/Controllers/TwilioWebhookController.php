@@ -56,8 +56,6 @@ class TwilioWebhookController extends Controller
         //parse response to string
         $response = json_encode($response);
 
-        $file=fopen("response.txt","w");
-        fwrite($file,$response);
 
        $callData = json_decode($response, true);
 
