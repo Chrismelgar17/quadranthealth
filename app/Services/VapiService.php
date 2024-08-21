@@ -92,16 +92,35 @@ class VapiService
         throw new \Exception('Failed to initiate Vapi AI call: ' . $response->body());
     }
 
-    public function getCallStatus($callId)
+    public function getCallStatus($assistantId)
     {
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $this->apiKey,
-        ])->get($this->apiUrl . '/call/' . $callId);
+        ])->get($this->apiUrl . '/call?assistantId='.$assistantId.'&limit=1');
 
         if ($response->successful()) {
             return $response->json();
         }
 
         throw new \Exception('Failed to get Vapi AI call status: ' . $response->body());
+    }
+
+    public function getAssistantId()
+    {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $this->apiKey,
+        ])->get($this->apiUrl . '/phone-number');
+
+        if ($response->successful()) {
+            $twilioAccountSid = config('twilio.account_sid');
+            $response = $response->json();
+            foreach ($response as $item) {
+            if ($item['twilioAccountSid'] === $twilioAccountSid) {
+                return $item['assistantId'];
+            }
+            }
+            throw new \Exception('Twilio account SID mismatch');
+        }
+        throw new \Exception('Failed to get Vapi AI call ID: ' . $response->body());
     }
 }

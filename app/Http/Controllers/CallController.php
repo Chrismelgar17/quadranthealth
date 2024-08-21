@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Twilio\TwiML\VoiceResponse;
 use Illuminate\Support\Facades\Log;
 use App\Models\Calls;
+use Twilio\TwiML\VoiceResponse as TwimlResponse;
 
 class CallController extends Controller
 {
@@ -25,11 +26,24 @@ class CallController extends Controller
 
         
         // try {
-            $vapiCallId = $this->vapiService->initiateCall(config('twilio.medical_practice_number'));
-            Calls::upsert([
-                'call_sid' => $request->input('CallSid'),
-                'vapi_call_id' => $vapiCallId,
-            ], ['call_sid'], ['vapi_call_id']);
+                $twiml = new TwimlResponse();
+        
+                // Dial the desired number
+            //    $dial =  $twiml->dial('', ['callerId' => config('twilio.twilio_number')]);
+            //     $dial->number('+541136688353');
+            //     if(!$dial){
+                    $twiml->redirect('https://api.vapi.ai/twilio/inbound_call', ['method' => 'POST']);
+                // }
+
+                return response($twiml)->header('Content-Type', 'text/xml');
+          
+
+        
+            
+            // Calls::upsert([
+            //     'call_sid' => $request->input('CallSid'),
+            //     'vapi_call_id' => $vapiCallId,
+            // ], ['call_sid'], ['vapi_call_id']);
 
 
             // $response = new VoiceResponse();
