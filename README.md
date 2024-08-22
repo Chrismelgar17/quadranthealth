@@ -67,7 +67,7 @@ The application provides a set of API endpoints to manage clinic records. Below 
 - **Create or update a clinic:**
 	```http
 	POST /clinics
-	PUT /clinics/{id}
+	PATCH /clinics/{id}
 	```
 
 - **Delete a clinic:**
