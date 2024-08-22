@@ -21,6 +21,11 @@ class Clinic extends Model
         'first_message',
     ];
 
+    // Get all clinic records
+    public static function getAll()
+    {
+        return self::all();
+    }
 
     // Read a clinic record by ID
     public static function getClinicById($id)

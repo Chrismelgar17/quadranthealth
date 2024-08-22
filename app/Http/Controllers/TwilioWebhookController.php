@@ -47,7 +47,7 @@ class TwilioWebhookController extends Controller
 
         // Get the vapi_call_id from the Calls model based on the CallSid
         // $vapiCallId = Calls::where('call_sid', $callSid)->value('');
-        $vapiAssistantId = $this->vapiService->getAssistantId();
+        $vapiAssistantId = $this->vapiService->getPhoneAssistantId($to);
         Log::info('Vapi Assistant ID:'. $vapiAssistantId);
 
         // Delay execution for 60 seconds
