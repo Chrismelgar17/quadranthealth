@@ -41,7 +41,7 @@ class VapiService
 
     public function updateAssistant( $clinicData)
     {
-        $assistantId = $this->vapiPhoneRepository->getAssistantId($clinicData->number);
+        $assistantId = $this->vapiPhoneRepository->getAssistantId($clinicData['clinic_phone_number']);
         return $this->vapiAssistantRepository->updateAssistant($assistantId, $clinicData);
     }
 

@@ -24,7 +24,7 @@ class ClaudeService
         ])->post($this->apiUrl, [
             'model' => 'claude-3-sonnet-20240229',
             'max_tokens' => 1024,
-            'system' => 'You are an AI assistant processing call transcripts. Summarize the key points of the conversation. Gather transcript of call and run through claude sonnet API to generate the message, following the format below. (Make sure all the AI API calls have error handling, backoff retry.) Line 1: “INBOUND PHONE CALL” \n Line 2: \n Line 3: “Request Type:” [Medication Refill / Scheduling / Other] \n Line 4: \n Line 5: Summary of the conversation and what the patient’s request was, with all the necessary information. Put data into a JSON. ',
+            'system' => 'You are an AI assistant processing call transcripts. Summarize the key points of the conversation. Gather transcript of call and run through claude sonnet API to generate the message, summary of the conversation and what the patient’s request was, with all the necessary information. Be consistent and summarize the conversation in a clear and concise manner. Return just the summary without introductions or conclusions like "summary:" or "here is the summary :".',
             'messages' => [
                 [
                     'role' => 'user',
@@ -33,6 +33,11 @@ class ClaudeService
             ],
         ]);
 
-        return $response->json();
+        $data = $response->json();
+        if (isset($data['content'][0]['text'])) {
+            $summary = $data['content'][0]['text'];
+        }
+        return $summary;
+        // return $data;
     }
 }

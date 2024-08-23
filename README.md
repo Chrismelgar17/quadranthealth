@@ -6,11 +6,6 @@ Quadrant Health is a Laravel-based application designed to manage clinic operati
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Contributing](#contributing)
-- [Code of Conduct](#code-of-conduct)
-- [Security Vulnerabilities](#security-vulnerabilities)
-- [License](#license)
 
 ## Installation
 
@@ -83,9 +78,9 @@ curl -X GET http://localhost:8000/clinics
 ```
 
 
-#### Get all clinics
+#### Get clinic by id
 ```sh
-curl -X GET http://localhost:8000/clinics/1
+curl -X GET http://localhost:8000/clinics/{id}
 ```
 
 ### Create a clinic
@@ -102,7 +97,7 @@ curl -X POST http://localhost:8000/clinics -d '{
 ```
 ### Update a Clinic
 ```sh
-curl -X PATCH http://localhost:8000/clinics -d '{
+curl -X PATCH http://localhost:8000/clinics/{id} -d '{
     "medical_practice_phone_number" : "+541136688353",
     "clinic_phone_number":"+18336471773",
     "clinic_name" : "Saint Madison Clinic",
@@ -115,5 +110,5 @@ curl -X PATCH http://localhost:8000/clinics -d '{
 
 #### Delete a clinic
 ```sh
-curl -X DELETE http://localhost:8000/clinics/1
+curl -X DELETE http://localhost:8000/clinics/{id}
 ```

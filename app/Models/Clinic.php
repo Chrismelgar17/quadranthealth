@@ -37,8 +37,10 @@ class Clinic extends Model
      public static function upsertClinic($data)
      {
          return self::upsert(
-             ['id' => $data['id']], // Assuming 'id' is the unique identifier
-             $data
+             $data,
+            ['id'],
+            $data
+
          );
      }
 

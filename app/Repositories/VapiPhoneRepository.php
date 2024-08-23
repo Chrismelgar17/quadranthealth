@@ -30,6 +30,10 @@ class VapiPhoneRepository
         if ($response->successful()) {
             return $response->json();
         }
+        else {
+            Log::error('Failed to create phone number: ' . $response->body());
+            return false;
+        }
 
     }
 
@@ -46,7 +50,7 @@ class VapiPhoneRepository
                     return $item['id'];
                 }
             }
-            throw new \Exception('Phone number not found');
+            return false;
         }
 
         throw new \Exception('Failed to get phone number ID: ' . $response->body());
@@ -85,6 +89,8 @@ class VapiPhoneRepository
 
     public function getAssistantId()
     {
+
+        $assistantId = false;
         $response = Http::withHeaders([
             'Authorization' => 'Bearer ' . $this->apiKey,
         ])->get($this->apiUrl . '/phone-number');
@@ -92,14 +98,16 @@ class VapiPhoneRepository
         if ($response->successful()) {
             $twilioAccountSid = config('twilio.account_sid');
             $response = $response->json();
+
             foreach ($response as $item) {
-            if ($item['twilioAccountSid'] === $twilioAccountSid) {
-                return $item['assistantId'];
+            if ($item['twilioAccountSid'] === $twilioAccountSid && $assistantId == false) {
+                $assistantId = $item['assistantId']??false;
             }
-            }
+               return $assistantId;
             throw new \Exception('Twilio account SID mismatch');
         }
     }
+}
 
     public function setAssistantId($numberId, $assistantId)
     {

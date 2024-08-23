@@ -9,20 +9,19 @@ async def process_transcript(transcript):
     # Decode HTML entities
     transcript = html.unescape(transcript)
 
-    # Process the transcript (example: just print it)
-    print(transcript)
-
     # Example resume text
     resume_text = transcript
 
     # Extract resume using baml_client
-    resume = await b.ExtractResume(resume_text)
+    resume = b.ExtractResume(resume_text)
 
     # Fully type-checked and validated!
     assert isinstance(resume, Resume)
 
-    # Print the extracted resume for demonstration
-    print(resume)
+   # Convert the resume object to a JSON string
+    resume_json = json.dumps(resume.__dict__)
+
+    return resume_json
 
 try:
     # Check if the script received the argument
@@ -38,7 +37,8 @@ try:
         transcript = json.loads(encoded_transcript)
 
         # Run the async function to process the transcript
-        asyncio.run(process_transcript(transcript))
+        resume_json = asyncio.run(process_transcript(transcript))
+        print(resume_json)
     else:
         print("No input received.")
 except Exception as e:

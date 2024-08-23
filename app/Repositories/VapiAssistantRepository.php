@@ -40,7 +40,11 @@ class VapiAssistantRepository
         - Be kind of funny and witty!
         - Keep all your responses short and simple. Use casual language, phrases like 'Umm...', 'Well...', and 'I mean' are preferred.
         - This is a voice conversation, so keep your responses short, like in a real conversation. Don't ramble for too long.
-        - Always maintain a friendly and efficient manner when interacting with callers.";
+        - Always maintain a friendly and efficient manner when interacting with callers.
+        
+        If the user asks for sales, call the transferCall function with +1234567890.
+        
+        finish the call when users says goodbye";
     }
 
     private function buildRequestPayload($clinicData, $content)
@@ -61,8 +65,9 @@ class VapiAssistantRepository
                         'content' => $content,
                     ],
                 ],
+               
             ],
-            'firstMessage' => "Hello, this is Ava. How may I assist you today? You can make an appointment booking, a medication refill or another. Please let me know.",
+            'firstMessage' => $clinicData["first_message"]??"Hello, this is Ava. How may I assist you today? You can make an appointment booking, a medication refill or another. Please let me know.",
             'endCallMessage' => 'Thanks for your time. Goodbye!',
             'endCallPhrases' => ['Goodbye'],
             'voice' => [
@@ -78,6 +83,7 @@ class VapiAssistantRepository
             ],
             'silenceTimeoutSeconds' => 30,
             'backgroundSound' => 'office',
+            
         ];
     }
 
@@ -92,7 +98,11 @@ class VapiAssistantRepository
         ])->post($this->apiUrl . '/assistant', $payload);
 
         if ($response->successful()) {
+            Log::info('Assistant created successfully: ' , $response->json());
             return $response->json()['id'];
+        }else
+        {
+            Log::error('Failed to create assistant: ' , $response->body());
         }
     }
 

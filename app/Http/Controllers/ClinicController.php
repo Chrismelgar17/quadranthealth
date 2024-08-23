@@ -9,9 +9,10 @@ use Illuminate\Http\Request;
 class ClinicController extends Controller
 {
 
-    public function __construct(protected VapiService $vapiService)
+    public function __construct(protected VapiService $vapiService, protected TwilioWebhookController $twilioWebhookController)
     {
     }
+
     public function getClinics()
     {
         return response()->json(Clinic::getAll());
@@ -29,21 +30,19 @@ class ClinicController extends Controller
     public function upsertClinic(Request $request)
     {
         $data = $request->all();
-        $data['id'] = $request->route('id');
-        $clinicId = Clinic::upsert(
-            $data,
-            ['id'],
-            $data
-        );
-        $assistantId = $this->vapiService->setAssistant($data);
-        $number = $data["clinic_phone_number"];
-        $numberId = $this->vapiService->getNumberId($data["clinic_phone_number"]);
+        $numberId = $this->getOrCreatePhoneNumberId($data);
+
         if (!$numberId) {
-            $numberId = $this->vapiService->createPhoneNumber($number);
+            return response()->json(['message' => 'Failed to create phone number, please add it to Twilio account.'], 500);
         }
-        $this->vapiService->setPhoneAssistantId($numberId, $assistantId);
 
+        if(null !== $request->route('id')) {
+            $data['id'] = $request->route('id');
+        }
 
+        
+        $clinicId = Clinic::upsertClinic($data);
+        $this->twilioWebhookController->setWebhooks($data['clinic_phone_number']);
         return response()->json(['id' => $clinicId]);
     }
 
@@ -55,4 +54,21 @@ class ClinicController extends Controller
         }
         return response()->json(['message' => 'Clinic not found'], 404);
     }
+
+    private function getOrCreatePhoneNumberId($clinicData)
+    {
+        $phoneNumber = $clinicData['clinic_phone_number'];
+        $numberId = $this->vapiService->getNumberId($phoneNumber);
+        if (!$numberId) {
+            $numberId = $this->vapiService->createPhoneNumber($phoneNumber);
+            $assistantId = $this->vapiService->setAssistant($clinicData);
+            $this->vapiService->setPhoneAssistantId($phoneNumber, $assistantId);
+        }else	{
+            $assistantId = $this->vapiService->updateAssistant($clinicData);
+            $this->vapiService->setPhoneAssistantId($phoneNumber, $assistantId);
+        }
+        return $numberId;
+    }
+
+   
 }
