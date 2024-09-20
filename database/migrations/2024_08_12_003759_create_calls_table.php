@@ -18,6 +18,7 @@ class CreateCallsTable extends Migration
             $table->string('request_type')->nullable();
             $table->text('transcript')->nullable();
             $table->text('summary')->nullable();
+            $table->string('patient_phone')->nullable(); // Patient phone number
             $table->timestamps();
         });
     }

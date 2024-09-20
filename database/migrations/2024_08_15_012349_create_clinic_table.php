@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('clinic_hours'); // Clinic hours
             $table->string('additional_clinic_goals'); // Additional clinic goals
             $table->string('first_message'); // First message
+            $table->string('vapi_assistant_id'); // VAPI Assistant ID
+            $table->string('scheduling_link'); // Scheduling link
             $table->timestamps();
         });
     }
